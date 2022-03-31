@@ -56,6 +56,11 @@
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
 						</div>
+						<div class="card-footer">
+							<p>
+								Not Registered yet, <a href="register_page"> Click here !!! </a>
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
