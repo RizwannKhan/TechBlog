@@ -11,6 +11,7 @@ public class User {
 	private String gender;
 	private String about;
 	private Timestamp regDate;
+	private String profile;
 
 	public User() {
 	}
@@ -87,6 +88,14 @@ public class User {
 
 	public void setRegDate(Timestamp regDate) {
 		this.regDate = regDate;
+	}
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 
 }

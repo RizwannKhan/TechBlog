@@ -1,3 +1,4 @@
+<%@page import="com.techblog.entities.Message"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -34,31 +35,41 @@
 							<span class="fa fa-user-circle fa-3x"></span> <br>
 							<p>Login here</p>
 						</div>
+						<%
+						Message msg = (Message) session.getAttribute("msg");
+						if (msg != null) {
+						%>
+						<div class="alert <%=msg.getCssClass()%>" role="alert">
+							<%=msg.getContent()%>
+						</div>
+						<%
+						session.removeAttribute("msg");
+						}
+						%>
 						<div class="card-body">
-							<form>
+							<form action="login" method="post" id="login_form">
 								<div class="form-group">
 									<label for="exampleInputEmail1">Email address</label> <input
 										type="email" class="form-control" id="exampleInputEmail1"
-										aria-describedby="emailHelp" placeholder="Enter email">
-									<small id="emailHelp" class="form-text text-muted">We'll
-										never share your email with anyone else.</small>
+										required name="user_email" aria-describedby="emailHelp"
+										placeholder="Enter email"> <small id="emailHelp"
+										class="form-text text-muted">We'll never share your
+										email with anyone else.</small>
 								</div>
 								<div class="form-group">
 									<label for="exampleInputPassword1">Password</label> <input
-										type="password" class="form-control"
-										id="exampleInputPassword1" placeholder="Password">
+										type="password" class="form-control" name="user_password"
+										required id="exampleInputPassword1" placeholder="Password">
 								</div>
-								<div class="form-check">
-									<input type="checkbox" class="form-check-input"
-										id="exampleCheck1"> <label class="form-check-label"
-										for="exampleCheck1">Check me out</label>
+								<div class="container text-center">
+									<button type="submit" class="btn btn-primary">Submit</button>
 								</div>
-								<button type="submit" class="btn btn-primary">Submit</button>
 							</form>
 						</div>
 						<div class="card-footer">
-							<p>
-								Not Registered yet, <a href="register_page"> Click here !!! </a>
+							<p class="mt-3">
+								Not Registered yet, <a href="register_page"> Click here !!!
+								</a>
 							</p>
 						</div>
 					</div>

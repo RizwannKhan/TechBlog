@@ -131,7 +131,7 @@
 						$('#loader').hide();
 						
 						if(data.trim() === 'done'){
-							swal("Registered Successfully", "Click to Login !!!", "success")
+							swal("Registered Successfully", "Click ok to Login !!!", "success")
 							.then((value) => {
 							  window.location="login_page"
 							});

@@ -29,7 +29,7 @@
 			<li class="nav-item"><a class="nav-link" href="#"><span
 					class="fa fa-address-book-o"></span> Contact</a></li>
 			<li class="nav-item"><a class="nav-link" href="login_page"><span
-					class="fa fa-user-circle"></span> Login</a></li>
+					class="fa fa-sign-in"></span> Login</a></li>
 			<li class="nav-item"><a class="nav-link" href="register_page"><span
 					class="fa fa-user-plus"></span> Signup</a></li>
 		</ul>
