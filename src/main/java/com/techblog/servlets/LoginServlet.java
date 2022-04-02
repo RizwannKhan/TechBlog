@@ -14,6 +14,7 @@ import com.techblog.dao.UserDao;
 import com.techblog.entities.Message;
 import com.techblog.entities.User;
 import com.techblog.helper.DBConnectionUtil;
+import com.techblog.helper.PasswordEncoder;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -23,27 +24,30 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		PrintWriter out = response.getWriter();
+		// String encodedPassword = null;
+		try {
+			String email = request.getParameter("user_email");
+			String password = request.getParameter("user_password");
+			// encodedPassword = PasswordEncoder.encrypt(password);
+			UserDao dao = new UserDao(DBConnectionUtil.getConnection());
 
-		String email = request.getParameter("user_email");
-		String password = request.getParameter("user_password");
+			User user = dao.getUserByEmailAndPassword(email, password);
 
-		UserDao dao = new UserDao(DBConnectionUtil.getConnection());
+			if (user == null) {
+				// user not exists
+				Message msg = new Message("Invalid email or password !!!", "error", "alert-danger");
+				response.sendRedirect("login_page");
+				HttpSession session = request.getSession();
+				session.setAttribute("msg", msg);
 
-		User user = dao.getUserByEmailAndPassword(email, password);
-
-		if (user == null) {
-			// user not exists
-//			out.print("Invalid User");
-			Message msg = new Message("Invalid email or password !!!", "error", "alert-danger");
-			response.sendRedirect("login_page");
-			HttpSession session = request.getSession();
-			session.setAttribute("msg", msg);
-
-		} else {
-			// login successful
-			HttpSession session = request.getSession();
-			session.setAttribute("current_user", user);
-			response.sendRedirect("profile");
+			} else {
+				// login successful
+				HttpSession session = request.getSession();
+				session.setAttribute("current_user", user);
+				response.sendRedirect("profile");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}

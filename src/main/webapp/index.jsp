@@ -20,6 +20,10 @@
 }
 </style>
 <title>TechBlog - Home</title>
+<!-- add icon link -->
+<link rel="icon"
+	href="img/title.png"
+	type="image/x-icon">
 </head>
 <body>
 	<!-- navbar starts -->
@@ -40,11 +44,10 @@
 				<p>Most programming languages consist of instructions for
 					computers. There are programmable machines that use a set of
 					specific instructions, rather than general programming languages.</p>
-				<a class="btn btn-lg btn-outline-light" href="register_page">
-					<span class="fa fa-user-plus"></span> Start ! It's Free
-				</a>
-				<a class="btn btn-lg btn-outline-light" href="login_page">
-					<span class="fa fa-user-circle fa-spin"></span> Login
+				<a class="btn btn-lg btn-outline-light" href="register_page"> <span
+					class="fa fa-user-plus"></span> Start ! It's Free
+				</a> <a class="btn btn-lg btn-outline-light" href="login_page"> <span
+					class="fa fa-user-circle fa-spin"></span> Login
 				</a>
 			</div>
 		</div>

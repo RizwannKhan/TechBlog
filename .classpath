@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="C:/Users/Rijwank/Downloads/javax.servlet.jsp.jstl-1.2.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Rijwank/Downloads/mysql-connector-java-8.0.28/mysql-connector-java-8.0.28/mysql-connector-java-8.0.28.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rijwank/Downloads/org-apache-commons-codec.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

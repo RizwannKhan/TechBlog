@@ -1,3 +1,5 @@
+<%@page import="com.techblog.helper.PasswordEncoder"%>
+<%@page import="com.techblog.entities.Message"%>
 <%@page import="com.techblog.entities.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -26,6 +28,8 @@ if (user == null) {
 }
 </style>
 <title>TechBlog - Profile</title>
+<!-- add icon link -->
+<link rel="icon" href="img/title.png" type="image/x-icon">
 </head>
 <body>
 
@@ -61,8 +65,9 @@ if (user == null) {
 						class="fa fa-address-book-o"></span> Contact</a></li>
 			</ul>
 			<ul class="navbar-nav mr-right">
-				<li class="nav-item active"><a class="nav-link" href="login_page"><span
-						class="fa fa-user-circle"></span> <%=user.getName() %></a></li>
+				<li class="nav-item active"><a class="nav-link" href="#!"
+					data-toggle="modal" data-target="#profile_modal"><span
+						class="fa fa-user-circle"></span> <%=user.getName()%></a></li>
 				<li class="nav-item"><a class="nav-link" href="logout"><span
 						class="fa fa-sign-out"></span> Logout</a></li>
 			</ul>
@@ -70,7 +75,123 @@ if (user == null) {
 	</nav>
 	<!-- navbar ends here -->
 
+	<!-- Message -->
+	<%
+	Message msg = (Message) session.getAttribute("msg");
+	if (msg != null) {
+	%>
+	<div class="alert <%=msg.getCssClass()%>" role="alert">
+		<%=msg.getContent()%>
+	</div>
+	<%
+	session.removeAttribute("msg");
+	}
+	%>
 
+	<!-- Start Profile Modal -->
+	<!-- Modal -->
+	<div class="modal fade" id="profile_modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header primary-background text-white text-center">
+					<h5 class="modal-title" id="exampleModalLabel">TechBlog</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="container text-center">
+						<img alt="" src="pics/<%=user.getProfile()%>" class="img-fluid"
+							style="border-radius: 50%; max-width: 150px;">
+						<h5 class="modal-title mt-2" id="exampleModalLabel"><%=user.getName().toUpperCase()%></h5>
+					</div>
+
+					<!-- details -->
+					<div id="profile_details"">
+						<table class="table table-hover">
+							<tbody>
+								<tr>
+									<th scope="row">ID :</th>
+									<td><%=user.getId()%></td>
+								</tr>
+								<tr>
+									<th scope="row">Email :</th>
+									<td><%=user.getEmail()%></td>
+								</tr>
+								<tr>
+									<th scope="row">Gender :</th>
+									<td colspan="2"><%=user.getGender().toUpperCase()%></td>
+								</tr>
+								<tr>
+									<th scope="row">Status :</th>
+									<td colspan="2"><%=user.getAbout()%></td>
+								</tr>
+								<tr>
+									<th scope="row">Registered On :</th>
+									<td colspan="2"><%=user.getRegDate().toString()%></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<!-- Profile edit -->
+					<div id="profile_edit" style="display: none;">
+						<h3 class="mt-2">Edit Profile</h3>
+						<form action="edit" method="post" enctype="multipart/form-data">
+							<table class="table table-hover">
+								<tbody>
+									<tr>
+										<th scope="row">ID :</th>
+										<td><%=user.getId()%></td>
+									</tr>
+									<tr>
+										<th scope="row">Name :</th>
+										<td><input type="text" name="user_name"
+											class="form-control" value="<%=user.getName()%>"></td>
+									</tr>
+									<tr>
+										<th scope="row">Email :</th>
+										<td><%=user.getEmail().toUpperCase()%></td>
+									</tr>
+									<tr>
+										<th scope="row">Password :</th>
+										<td><input type="password" name="user_password"
+											class="form-control" value="<%=user.getPassword()%>"></td>
+									</tr>
+									<tr>
+										<th scope="row">Gender :</th>
+										<td><%=user.getGender().toUpperCase()%></td>
+									</tr>
+									<tr>
+										<th scope="row">Status :</th>
+										<td colspan="2"><textarea rows="" cols=""
+												name="user_about" class="form-control"><%=user.getAbout()%>
+										</textarea></td>
+									</tr>
+									<tr>
+										<th scope="row">Select Profile</th>
+										<td><input type="file" name="image" class="form-control"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="container text-center">
+								<button class="btn btn-outline-primary" type="submit">Save</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" id="edit_profile_btn" class="btn btn-primary">EDIT</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Profile Modal -->
 
 	<!-- javascript -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -85,6 +206,29 @@ if (user == null) {
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script type="text/javascript" src="js/myjs.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			let editStatus = false;
+
+			$('#edit_profile_btn').click(function() {
+
+				if (editStatus == false) {
+					$('#profile_details').hide();
+					$('#profile_edit').show();
+					editStatus = true;
+					$(this).text("BACK");
+				} else {
+					$('#profile_details').show();
+					$('#profile_edit').hide();
+					editStatus = false;
+					$(this).text("EDIT");
+				}
+
+			});
+		});
+	</script>
 
 </body>
 </html>

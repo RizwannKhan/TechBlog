@@ -19,6 +19,8 @@
 }
 </style>
 <title>TechBlog - Register</title>
+<!-- add icon link -->
+<link rel="icon" href="img/title.png" type="image/x-icon">
 </head>
 <body>
 

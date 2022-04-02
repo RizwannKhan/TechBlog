@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import com.techblog.entities.User;
+import com.techblog.helper.PasswordEncoder;
 
 public class UserDao {
 
@@ -18,7 +19,10 @@ public class UserDao {
 	// insert user to database...
 	public boolean saveUser(User user) {
 		boolean status = false;
+		// String encodedPassword = null;
+
 		try {
+			// encodedPassword = PasswordEncoder.encrypt(user.getPassword());
 			String q = "insert into user(name, email, password, gender, about) values(?, ?, ?, ?, ?)";
 			stmt = con.prepareStatement(q);
 
@@ -55,6 +59,7 @@ public class UserDao {
 				user.setId(rs.getInt("id"));
 				user.setName(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
+				user.setPassword(rs.getString("password"));
 				user.setGender(rs.getString("gender"));
 				user.setAbout(rs.getString("about"));
 				user.setRegDate(rs.getTimestamp("reg_date"));
@@ -64,6 +69,30 @@ public class UserDao {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	public boolean updateUser(User user) {
+		boolean st = false;
+		// String encodedPassword = null;
+		try {
+			// encodedPassword = PasswordEncoder.encrypt(user.getPassword());
+			String q = "update user set name=?, email=?, password=?, gender=?, about=?, profile=? where id=?";
+			stmt = con.prepareStatement(q);
+			stmt.setString(1, user.getName());
+			stmt.setString(2, user.getEmail());
+			stmt.setString(3, user.getPassword());
+			stmt.setString(4, user.getGender());
+			stmt.setString(5, user.getAbout());
+			stmt.setString(6, user.getProfile());
+			stmt.setInt(7, user.getId());
+			stmt.executeUpdate();
+			System.out.println(stmt);
+			st = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return st;
 	}
 
 }

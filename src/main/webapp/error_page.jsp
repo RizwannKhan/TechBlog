@@ -19,6 +19,8 @@
 }
 </style>
 <title>Error - Sorry !!!</title>
+<!-- add icon link -->
+<link rel="icon" href="img/title.png" type="image/x-icon">
 </head>
 <body>
 
@@ -26,8 +28,9 @@
 		<img class="img-fluid" alt="Error !!! Sorry, Something went wrong"
 			src="img/error1.png">
 		<h3 class="display-3">Sorry ! Something went wrong...</h3>
-		<h6 class="mt-3"><%= exception %></h6>
-		<a class="btn primary-background btn-lg text-white mt-3 display-3" href="index"><span class="fa fa-home fa-1x"></span>  Home</a>
+		<h6 class="mt-3"><%=exception%></h6>
+		<a class="btn primary-background btn-lg text-white mt-3 display-3"
+			href="index"><span class="fa fa-home fa-1x"></span> Home</a>
 	</div>
 
 </body>
