@@ -1,3 +1,8 @@
+<%@page import="java.util.List"%>
+<%@page import="com.techblog.entities.Category"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.techblog.helper.DBConnectionUtil"%>
+<%@page import="com.techblog.dao.PostDao"%>
 <%@page import="com.techblog.helper.PasswordEncoder"%>
 <%@page import="com.techblog.entities.Message"%>
 <%@page import="com.techblog.entities.User"%>
@@ -63,6 +68,9 @@ if (user == null) {
 					</div></li>
 				<li class="nav-item"><a class="nav-link" href="#"><span
 						class="fa fa-address-book-o"></span> Contact</a></li>
+				<li class="nav-item"><a class="nav-link" href="#!"
+					data-toggle="modal" data-target="#add_post_modal"><span
+						class="fa fa-asterisk"></span> Add Post</a></li>
 			</ul>
 			<ul class="navbar-nav mr-right">
 				<li class="nav-item active"><a class="nav-link" href="#!"
@@ -193,6 +201,64 @@ if (user == null) {
 	</div>
 	<!-- End Profile Modal -->
 
+	<!-- Start add post modal -->
+	<!-- Modal -->
+	<div class="modal fade" id="add_post_modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add Post
+						Details</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="addPost" method="post" enctype="multipart/form-data"
+						id="post_form">
+						<div class="form-group">
+							<select class="form-control" name="cid">
+								<option selected disabled>---Select Category---</option>
+								<%
+								PostDao postDao = new PostDao(DBConnectionUtil.getConnection());
+								List<Category> list = postDao.getAllCategories();
+								for (Category c : list) {
+								%>
+								<option value="<%=c.getCid()%>"><%=c.getName()%></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="text" placeholder="Enter Post Title" name="pTitle"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<textarea rows="5" cols="" class="form-control" name="pContent"
+								placeholder="Enter your Content"></textarea>
+						</div>
+						<div class="form-group">
+							<textarea rows="5" cols="" class="form-control" name="pCode"
+								placeholder="Enter your Program Code (if any)"></textarea>
+						</div>
+						<div class="form-group">
+							<label>Select Your Pic</label><br> <input type="file"
+								name="pPic" class="form-control">
+						</div>
+						<div class="container text-center">
+							<button type="submit" class="btn btn-outline-primary">Add
+								Post</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end add post modal -->
+
 	<!-- javascript -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
 		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -205,6 +271,7 @@ if (user == null) {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script type="text/javascript" src="js/myjs.js"></script>
 
 	<script type="text/javascript">
@@ -228,6 +295,42 @@ if (user == null) {
 
 			});
 		});
+	</script>
+
+	<!-- now add post js -->
+	<script type="text/javascript">
+		$(document).ready(function(e) {
+			$("#post_form").on("submit", function(event) {
+
+				event.preventDefault();
+
+				let postForm = new FormData(this);
+
+				//now requisting to server...
+				$.ajax({
+					url : "addPost",
+					type : 'POST',
+					data : postForm,
+
+					success : function(data, textStatus, jqXHR) {
+						//console.log("Post added");
+						console.log(data);
+						if(data.trim() === "done"){
+							swal("Post Added", "Your post has been added successfully", "success");
+						}else{
+							swal("Error !!!", "Something went wrong", "error");
+						}
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						console.log("Error");
+						swal("Error !!!", "Something went wrong", "error");
+					},
+					processData : false,
+					contentType : false
+				})
+
+			})
+		})
 	</script>
 
 </body>
