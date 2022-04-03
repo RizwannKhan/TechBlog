@@ -96,6 +96,47 @@ if (user == null) {
 	}
 	%>
 
+	<!-- main body of page -->
+	<main>
+		<div class="container">
+			<div class="row mt-4">
+				<div class="col-md-4">
+					<!-- categories -->
+					<div class="list-group">
+						<%
+						PostDao pDao = new PostDao(DBConnectionUtil.getConnection());
+						%>
+						<a href="#" onclick="getPosts(0, this)"
+							class="list-group-item d-flex justify-content-between align-items-center list-group-item-action active c-link">
+							All Posts <span class="badge badge-light badge-pill"><%=pDao.getAllPosts().size()%></span>
+						</a>
+						<%
+						List<Category> listCat = pDao.getAllCategories();
+						for (Category cat : listCat) {
+						%>
+						<a href="#" onclick="getPosts(<%=cat.getCid()%>, this)"
+							class="list-group-item d-flex justify-content-between align-items-center list-group-item-action c-link"><%=cat.getName()%>
+							<span class="badge badge-light badge-pill"><%=pDao.getPostByCatId(cat.getCid()).size()%></span>
+						</a>
+						<%
+						}
+						%>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<!-- posts -->
+					<div class="container text-center" id="post_loader">
+						<i class="fa fa-refresh fa-5x fa-spin"></i>
+						<h3 class="mt-3">Loading...</h3>
+					</div>
+					<div class="container-fluid" id="post_container"></div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<!-- end main body of page -->
+
+
 	<!-- Start Profile Modal -->
 	<!-- Modal -->
 	<div class="modal fade" id="profile_modal" tabindex="-1" role="dialog"
@@ -175,8 +216,7 @@ if (user == null) {
 									<tr>
 										<th scope="row">Status :</th>
 										<td colspan="2"><textarea rows="" cols=""
-												name="user_about" class="form-control"><%=user.getAbout()%>
-										</textarea></td>
+												name="user_about" class="form-control"><%=user.getAbout()%></textarea></td>
 									</tr>
 									<tr>
 										<th scope="row">Select Profile</th>
@@ -316,7 +356,10 @@ if (user == null) {
 						//console.log("Post added");
 						console.log(data);
 						if(data.trim() === "done"){
-							swal("Post Added", "Your post has been added successfully", "success");
+							swal("Post Added", "Your post has been added successfully", "success")
+							.then((value) => {
+								  window.location="profile"
+								});
 						}else{
 							swal("Error !!!", "Something went wrong", "error");
 						}
@@ -331,6 +374,34 @@ if (user == null) {
 
 			})
 		})
+	</script>
+
+	<!-- loading posts using ajax -->
+	<script type="text/javascript">
+		
+		function getPosts(catId, temp) {			
+			$('#post_loader').show();
+			$('#post_container').hide();
+			
+			$('.c-link').removeClass('active');			
+			
+			$.ajax({
+				url: "load_posts",
+				data: {cid: catId},
+				success: function(data, textStatus, jqXHR) {
+					console.log(data);
+					$('#post_loader').hide();
+					$('#post_container').show();
+					$('#post_container').html(data);
+					$(temp).addClass('active');
+				}
+			});		
+		}
+	
+		$(document).ready(function(e) {
+			let allPostRef = $('.c-link')[0];			
+			getPosts(0, allPostRef);				
+		});
 	</script>
 
 </body>

@@ -58,6 +58,7 @@ public class EditServlet extends HttpServlet {
 
 			// save new profile pic...
 			String path = request.getRealPath("/") + "pics" + File.separator + user.getProfile();
+			System.out.println(path);
 			if (Helper.saveFile(part.getInputStream(), path)) {
 				out.print("profile updated");
 				Message msg = new Message("Profile Updated !!!", "success", "alert-success");

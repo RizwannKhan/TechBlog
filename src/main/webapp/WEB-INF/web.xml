@@ -43,5 +43,14 @@
 		<servlet-name>profile</servlet-name>
 		<url-pattern>/profile</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>load_posts</servlet-name>
+		<jsp-file>/load_posts.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>load_posts</servlet-name>
+		<url-pattern>/load_posts</url-pattern>
+	</servlet-mapping>
 
 </web-app>

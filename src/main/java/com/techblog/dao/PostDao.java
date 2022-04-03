@@ -66,4 +66,58 @@ public class PostDao {
 		return st;
 	}
 
+	// get all posts...
+	public List<Post> getAllPosts() {
+		List<Post> list = new ArrayList<>();
+
+		try {
+			String q = "select * from posts order by pid desc";
+			stmt = con.prepareStatement(q);
+			ResultSet rs = stmt.executeQuery();
+			System.out.println(stmt);
+			while (rs.next()) {
+				Post p = new Post();
+				p.setpId(rs.getInt("pid"));
+				p.setpTitle(rs.getString("pTitle"));
+				p.setpContent(rs.getString("pContent"));
+				p.setpCode(rs.getString("pCode"));
+				p.setpPic(rs.getString("pPic"));
+				p.setpDate(rs.getTimestamp("pDate"));
+				p.setCatId(rs.getInt("catId"));
+				p.setUserId(rs.getInt("userId"));
+				list.add(p);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	// get posts by category
+	public List<Post> getPostByCatId(int catId) {
+		List<Post> list = new ArrayList<>();
+
+		try {
+			String q = "select * from posts where catId=?";
+			stmt = con.prepareStatement(q);
+			stmt.setInt(1, catId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Post p = new Post();
+				p.setpId(rs.getInt("pid"));
+				p.setpTitle(rs.getString("pTitle"));
+				p.setpContent(rs.getString("pContent"));
+				p.setpCode(rs.getString("pCode"));
+				p.setpPic(rs.getString("pPic"));
+				p.setpDate(rs.getTimestamp("pDate"));
+				p.setCatId(rs.getInt("catId"));
+				p.setUserId(rs.getInt("userId"));
+				list.add(p);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }
