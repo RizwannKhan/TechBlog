@@ -24,12 +24,17 @@
 	for (Post p : posts) {
 	%>
 	<div class="col-md-6 mt-2">
-		<div class="card" style="width: 20rem;">
+		<div class="card">
 			<img class="card-img-top img-fluid" src="post_pics/<%=p.getpPic()%>"
 				alt="Card image cap">
 			<div class="card-body">
 				<b><%=p.getpTitle()%></b>
 				<p><%=p.getpContent()%></p>
+			</div>
+			<div class="card-footer primary-background">
+				<a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i> <span>10</span></a>
+				<a href="show_single_post?post_id=<%=p.getpId() %>" class="btn btn-outline-light btn-sm">Read more...</a>
+				<a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i> <span>20</span></a>
 			</div>
 		</div>
 	</div>

@@ -1,10 +1,10 @@
-<%@page import="java.util.List"%>
+<%@page import="com.techblog.dao.UserDao"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="com.techblog.entities.Category"%>
-<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="com.techblog.entities.Post"%>
 <%@page import="com.techblog.helper.DBConnectionUtil"%>
 <%@page import="com.techblog.dao.PostDao"%>
-<%@page import="com.techblog.helper.PasswordEncoder"%>
-<%@page import="com.techblog.entities.Message"%>
 <%@page import="com.techblog.entities.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -14,6 +14,13 @@ User user = (User) session.getAttribute("current_user");
 if (user == null) {
 	response.sendRedirect("login_page");
 }
+%>
+
+<%
+int postId = Integer.parseInt(request.getParameter("post_id"));
+
+PostDao pDao = new PostDao(DBConnectionUtil.getConnection());
+Post post = pDao.getPostById(postId);
 %>
 <!DOCTYPE html>
 <html>
@@ -31,13 +38,39 @@ if (user == null) {
 .banner-background {
 	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 99%, 67% 95%, 32% 100%, 0 94%, 0 0);
 }
+
+.post-title {
+	font-weight: 100;
+	font-size: 30px;
+}
+
+.post-content {
+	font-weight: 100;
+	font-size: 20px;
+}
+
+.post-user-info {
+	font-size: 20px;
+	font-weight: 300;
+}
+
+.post-date {
+	font-size: 15px;
+	font-style: italic;
+}
+
+.row-user {
+	border: 1px solid #e2e2e2;
+	padding-top: 15px;
+}
+
 body {
 	background: url("img/background4.png");
 	background-size: cover;
 	background-attachment: fixed;
 }
 </style>
-<title>TechBlog - Profile</title>
+<title>TechBlog - <%=post.getpTitle()%></title>
 <!-- add icon link -->
 <link rel="icon" href="img/title.png" type="image/x-icon">
 </head>
@@ -88,58 +121,53 @@ body {
 	</nav>
 	<!-- navbar ends here -->
 
-	<!-- Message -->
-	<%
-	Message msg = (Message) session.getAttribute("msg");
-	if (msg != null) {
-	%>
-	<div class="alert <%=msg.getCssClass()%>" role="alert">
-		<%=msg.getContent()%>
-	</div>
-	<%
-	session.removeAttribute("msg");
-	}
-	%>
 
-	<!-- main body of page -->
-	<main>
-		<div class="container">
-			<div class="row mt-4">
-				<div class="col-md-4">
-					<!-- categories -->
-					<div class="list-group">
-						<%
-						PostDao pDao = new PostDao(DBConnectionUtil.getConnection());
-						%>
-						<a href="#" onclick="getPosts(0, this)"
-							class="list-group-item d-flex justify-content-between align-items-center list-group-item-action active c-link">
-							All Posts <span class="badge badge-light badge-pill"><%=pDao.getAllPosts().size()%></span>
-						</a>
-						<%
-						List<Category> listCat = pDao.getAllCategories();
-						for (Category cat : listCat) {
-						%>
-						<a href="#" onclick="getPosts(<%=cat.getCid()%>, this)"
-							class="list-group-item d-flex justify-content-between align-items-center list-group-item-action c-link"><%=cat.getName()%>
-							<span class="badge badge-light badge-pill"><%=pDao.getPostByCatId(cat.getCid()).size()%></span>
-						</a>
-						<%
-						}
-						%>
+	<!-- Main content of body -->
+	<div class="container">
+		<div class="row my-4">
+			<div class="col-md-8 offset-md-2">
+				<div class="card">
+					<div class="card-header primary-background text-white">
+						<h4 class="post-title"><%=post.getpTitle()%></h4>
 					</div>
-				</div>
-				<div class="col-md-8">
-					<!-- posts -->
-					<div class="container text-center" id="post_loader">
-						<i class="fa fa-refresh fa-5x fa-spin"></i>
-						<h3 class="mt-3">Loading...</h3>
+					<div class="card-body">
+						<img class="card-img-top img-fluid my-2"
+							src="post_pics/<%=post.getpPic()%>" alt="Card image cap">
+						<div class="row my-3 row-user">
+							<div class="col-md-7">
+								<p class="post-user-info">
+									<%
+									UserDao dao = new UserDao(DBConnectionUtil.getConnection());
+									%>
+									<a href="#"><%=dao.getUserById(post.getUserId()).getName()%>
+									</a>has posted:
+								</p>
+							</div>
+							<div class="col-md-5">
+								<p class="post-date">
+									added on :
+									<%=DateFormat.getDateTimeInstance().format(post.getpDate())%></p>
+							</div>
+						</div>
+						<p class="post-content"><%=post.getpContent()%></p>
+						<br> <br>
+						<div class="post-code">
+							<pre><%=post.getpCode()%></pre>
+						</div>
 					</div>
-					<div class="container-fluid" id="post_container"></div>
+					<div class="card-footer primary-background">
+						<a href="#" class="btn btn-outline-light btn-sm"><i
+							class="fa fa-thumbs-o-up"></i> <span>10</span></a> <a href="#"
+							class="btn btn-outline-light btn-sm"><i
+							class="fa fa-commenting-o"></i> <span>20</span></a>
+					</div>
 				</div>
 			</div>
 		</div>
-	</main>
-	<!-- end main body of page -->
+	</div>
+
+
+	<!-- End Main content of body -->
 
 
 	<!-- Start Profile Modal -->
@@ -303,6 +331,7 @@ body {
 		</div>
 	</div>
 	<!-- end add post modal -->
+
 
 	<!-- javascript -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
