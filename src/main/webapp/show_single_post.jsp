@@ -156,7 +156,9 @@ body {
 						</div>
 					</div>
 					<div class="card-footer primary-background">
-						<a href="#" class="btn btn-outline-light btn-sm"><i
+						<a href="#"
+							onclick="doLike(<%=post.getpId()%>, <%=user.getId()%>)"
+							class="btn btn-outline-light btn-sm"> <i
 							class="fa fa-thumbs-o-up"></i> <span>10</span></a> <a href="#"
 							class="btn btn-outline-light btn-sm"><i
 							class="fa fa-commenting-o"></i> <span>20</span></a>
@@ -388,7 +390,7 @@ body {
 
 					success : function(data, textStatus, jqXHR) {
 						//console.log("Post added");
-						console.log(data);
+						//console.log(data);
 						if(data.trim() === "done"){
 							swal("Post Added", "Your post has been added successfully", "success")
 							.then((value) => {
@@ -423,7 +425,7 @@ body {
 				url: "load_posts",
 				data: {cid: catId},
 				success: function(data, textStatus, jqXHR) {
-					console.log(data);
+					//console.log(data);
 					$('#post_loader').hide();
 					$('#post_container').show();
 					$('#post_container').html(data);

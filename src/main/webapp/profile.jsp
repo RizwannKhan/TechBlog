@@ -359,7 +359,7 @@ body {
 
 					success : function(data, textStatus, jqXHR) {
 						//console.log("Post added");
-						console.log(data);
+						//console.log(data);
 						if(data.trim() === "done"){
 							swal("Post Added", "Your post has been added successfully", "success")
 							.then((value) => {
@@ -394,7 +394,7 @@ body {
 				url: "load_posts",
 				data: {cid: catId},
 				success: function(data, textStatus, jqXHR) {
-					console.log(data);
+					//console.log(data);
 					$('#post_loader').hide();
 					$('#post_container').show();
 					$('#post_container').html(data);
