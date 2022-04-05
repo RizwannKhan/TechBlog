@@ -21,9 +21,7 @@
 </style>
 <title>TechBlog - Home</title>
 <!-- add icon link -->
-<link rel="icon"
-	href="img/title.png"
-	type="image/x-icon">
+<link rel="icon" href="img/title.png" type="image/x-icon">
 </head>
 <body>
 	<!-- navbar starts -->
@@ -55,75 +53,16 @@
 
 	<!-- cards -->
 	<div class="container">
-		<div class="row mb-2">
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming Language</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read
-							more</a>
-					</div>
+		<div class="row mt-2">
+			<div class="col-md-12">
+				<!-- posts -->
+				<div class="container text-center" id="post_loader">
+					<i class="fa fa-refresh fa-5x fa-spin"></i>
+					<h3 class="mt-3">Loading...</h3>
 				</div>
+				<div class="container-fluid" id="post_container"></div>
 			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming Language</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read
-							more</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming Language</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read
-							more</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming Language</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read
-							more</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming Language</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read
-							more</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming Language</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read
-							more</a>
-					</div>
-				</div>
-			</div>
+
 		</div>
 	</div>
 
@@ -142,6 +81,31 @@
 		crossorigin="anonymous"></script>
 	<script type="text/javascript" src="js/myjs.js"></script>
 
+	<!-- loading posts using ajax -->
+	<script type="text/javascript">
+		function getPosts(catId) {
+			$('#post_loader').show();
+			$('#post_container').hide();
+
+			$.ajax({
+				url : "load_posts",
+				data : {
+					cid : catId
+				},
+				success : function(data, textStatus, jqXHR) {
+					//console.log(data);
+					$('#post_loader').hide();
+					$('#post_container').show();
+					$('#post_container').html(data);
+
+				}
+			});
+		}
+
+		$(document).ready(function(e) {
+			getPosts(0);
+		});
+	</script>
 
 	<script>
 		/* $(document).ready(function() {

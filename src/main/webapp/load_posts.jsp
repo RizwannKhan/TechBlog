@@ -1,3 +1,5 @@
+<%@page import="com.techblog.entities.User"%>
+<%@page import="com.techblog.dao.LikeDao"%>
 <%@page import="com.techblog.entities.Post"%>
 <%@page import="java.util.List"%>
 <%@page import="com.techblog.helper.DBConnectionUtil"%>
@@ -5,6 +7,8 @@
 
 <div class="row">
 	<%
+	User user = (User) session.getAttribute("current_user");
+
 	Thread.sleep(1000);
 
 	PostDao dao = new PostDao(DBConnectionUtil.getConnection());
@@ -32,9 +36,16 @@
 				<p><%=p.getpContent()%></p>
 			</div>
 			<div class="card-footer primary-background">
-				<a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i> <span>10</span></a>
-				<a href="show_single_post?post_id=<%=p.getpId() %>" class="btn btn-outline-light btn-sm">Read more...</a>
-				<a href="#" class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i> <span>20</span></a>
+				<%
+				LikeDao ld = new LikeDao(DBConnectionUtil.getConnection());
+				%>
+				<a href="#" 
+					class="btn btn-outline-light btn-sm"><i
+					class="fa fa-thumbs-o-up"></i> <span class="like-counter"><%=ld.countLikeOnPost(p.getpId())%></span></a>
+				<a href="show_single_post?post_id=<%=p.getpId()%>"
+					class="btn btn-outline-light btn-sm">Read more...</a> <a href="#"
+					class="btn btn-outline-light btn-sm"><i
+					class="fa fa-commenting-o"></i> <span>20</span></a>
 			</div>
 		</div>
 	</div>

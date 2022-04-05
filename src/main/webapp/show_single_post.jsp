@@ -1,3 +1,4 @@
+<%@page import="com.techblog.dao.LikeDao"%>
 <%@page import="com.techblog.dao.UserDao"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="com.techblog.entities.Category"%>
@@ -70,11 +71,21 @@ body {
 	background-attachment: fixed;
 }
 </style>
+
 <title>TechBlog - <%=post.getpTitle()%></title>
 <!-- add icon link -->
 <link rel="icon" href="img/title.png" type="image/x-icon">
+
+<!-- Facebook comment plugin -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+	src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v13.0"
+	nonce="SeogJhW1"></script>
+<!-- End Facebook comment plugin -->
+
 </head>
 <body>
+
 
 	<!-- navbar starts here -->
 	<nav class="navbar navbar-expand-lg navbar-dark primary-background">
@@ -156,12 +167,20 @@ body {
 						</div>
 					</div>
 					<div class="card-footer primary-background">
+						<%
+						LikeDao ld = new LikeDao(DBConnectionUtil.getConnection());
+						%>
 						<a href="#"
 							onclick="doLike(<%=post.getpId()%>, <%=user.getId()%>)"
 							class="btn btn-outline-light btn-sm"> <i
-							class="fa fa-thumbs-o-up"></i> <span>10</span></a> <a href="#"
-							class="btn btn-outline-light btn-sm"><i
+							class="fa fa-thumbs-o-up"></i> <span class="like-counter"><%=ld.countLikeOnPost(post.getpId())%></span></a>
+						<a href="#" class="btn btn-outline-light btn-sm"><i
 							class="fa fa-commenting-o"></i> <span>20</span></a>
+					</div>
+					<div class="card-footer">
+						<div class="fb-comments"
+							data-href="http://localhost:8181/TechBlog/show_single_post?post_id=<%=post.getpId()%>"
+							data-width="" data-numposts="5"></div>
 					</div>
 				</div>
 			</div>
